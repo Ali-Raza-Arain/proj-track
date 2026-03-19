@@ -12,7 +12,7 @@ process.stderr.write = () => true;
 
 import { isSensitive } from './utils/security-filter.js';
 import { appendCommand } from './utils/file-handler.js';
-import { isProjectDirectory, isTrackingPaused } from './utils/project-detector.js';
+import { isProjectDirectory, isTrackingPaused, isTrackingDisabled } from './utils/project-detector.js';
 
 const command = process.argv.slice(2).join(' ').trim();
 
@@ -23,6 +23,11 @@ if (!command) {
 
 // Not a project directory — silent exit
 if (!isProjectDirectory()) {
+  process.exit(0);
+}
+
+// Tracking permanently disabled (proj-track remove) — silent exit
+if (isTrackingDisabled()) {
   process.exit(0);
 }
 

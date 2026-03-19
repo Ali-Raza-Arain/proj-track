@@ -85,6 +85,7 @@ __proj_track_capture() {
   [[ "$last_cmd" =~ ^__git ]] && return
 
   if [ -d ".git" ] || [ -f "package.json" ] || [ -f ".proj-track.json" ]; then
+    [ -f ".proj-track-disabled" ] && return
     [ -f ".proj-track.json.paused" ] && return
     (proj-track-logger "$last_cmd" >/dev/null 2>&1 &)
     disown -a 2>/dev/null
@@ -131,6 +132,7 @@ __proj_track_preexec() {
   [[ "$cmd" =~ ^__git ]] && return
 
   if [ -d ".git" ] || [ -f "package.json" ] || [ -f ".proj-track.json" ]; then
+    [ -f ".proj-track-disabled" ] && return
     [ -f ".proj-track.json.paused" ] && return
     (proj-track-logger "$cmd" >/dev/null 2>&1 &)
     disown 2>/dev/null

@@ -24,3 +24,11 @@ export function isTrackingPaused(dir?: string): boolean {
   const cwd = dir ?? process.cwd();
   return fs.existsSync(path.join(cwd, '.proj-track.json.paused'));
 }
+
+/**
+ * Check if tracking has been permanently disabled via `proj-track remove`.
+ */
+export function isTrackingDisabled(dir?: string): boolean {
+  const cwd = dir ?? process.cwd();
+  return fs.existsSync(path.join(cwd, '.proj-track-disabled'));
+}

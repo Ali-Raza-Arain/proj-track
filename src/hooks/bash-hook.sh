@@ -35,6 +35,9 @@ __proj_track_capture() {
 
   # Check if in a project directory (.git, package.json, or .proj-track.json)
   if [ -d ".git" ] || [ -f "package.json" ] || [ -f ".proj-track.json" ]; then
+    # Check if permanently disabled (proj-track remove)
+    [ -f ".proj-track-disabled" ] && return
+
     # Check if paused
     [ -f ".proj-track.json.paused" ] && return
 

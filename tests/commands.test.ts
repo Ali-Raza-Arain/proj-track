@@ -85,7 +85,7 @@ describe('resume command', () => {
 });
 
 describe('remove command', () => {
-  it('converts .proj-track.json to .proj-track.txt', async () => {
+  it('converts .proj-track.json to .proj-track.txt and creates disabled marker', async () => {
     fs.writeFileSync(path.join(tmpDir, '.proj-track.json'), JSON.stringify({
       projectName: 'test',
       commands: [
@@ -100,6 +100,7 @@ describe('remove command', () => {
 
     expect(fs.existsSync(path.join(tmpDir, '.proj-track.json'))).toBe(false);
     expect(fs.existsSync(path.join(tmpDir, '.proj-track.txt'))).toBe(true);
+    expect(fs.existsSync(path.join(tmpDir, '.proj-track-disabled'))).toBe(true);
 
     const content = fs.readFileSync(path.join(tmpDir, '.proj-track.txt'), 'utf-8');
     expect(content).toContain('npm test');
@@ -120,6 +121,7 @@ describe('remove command', () => {
     expect(fs.existsSync(path.join(tmpDir, '.proj-track.json'))).toBe(false);
     expect(fs.existsSync(path.join(tmpDir, '.proj-track.json.paused'))).toBe(false);
     expect(fs.existsSync(path.join(tmpDir, '.proj-track.txt'))).toBe(true);
+    expect(fs.existsSync(path.join(tmpDir, '.proj-track-disabled'))).toBe(true);
     consoleSpy.mockRestore();
   });
 });

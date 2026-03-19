@@ -4,3 +4,4 @@ node_modules
 .proj-track.txt
 .proj-track.json.paused
 package-lock.json
+.proj-track-disabled

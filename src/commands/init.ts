@@ -23,6 +23,12 @@ export async function initCommand(): Promise<void> {
     return;
   }
 
+  // Remove disabled marker if re-initializing after a remove
+  const disabledPath = path.join(process.cwd(), '.proj-track-disabled');
+  if (fs.existsSync(disabledPath)) {
+    fs.unlinkSync(disabledPath);
+  }
+
   // Create initial history file
   const history = readHistory();
   writeHistory(history);

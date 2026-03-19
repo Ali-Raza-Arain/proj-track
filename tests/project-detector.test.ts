@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
-import { isProjectDirectory, isTrackingPaused } from '../src/utils/project-detector.js';
+import { isProjectDirectory, isTrackingPaused, isTrackingDisabled } from '../src/utils/project-detector.js';
 
 let tmpDir: string;
 
@@ -54,5 +54,21 @@ describe('isTrackingPaused', () => {
   it('returns false when only .proj-track.json exists (not paused)', () => {
     fs.writeFileSync(path.join(tmpDir, '.proj-track.json'), '{}');
     expect(isTrackingPaused(tmpDir)).toBe(false);
+  });
+});
+
+describe('isTrackingDisabled', () => {
+  it('returns true when .proj-track-disabled exists', () => {
+    fs.writeFileSync(path.join(tmpDir, '.proj-track-disabled'), 'disabled');
+    expect(isTrackingDisabled(tmpDir)).toBe(true);
+  });
+
+  it('returns false when .proj-track-disabled does not exist', () => {
+    expect(isTrackingDisabled(tmpDir)).toBe(false);
+  });
+
+  it('returns false when only .proj-track.json exists (not disabled)', () => {
+    fs.writeFileSync(path.join(tmpDir, '.proj-track.json'), '{}');
+    expect(isTrackingDisabled(tmpDir)).toBe(false);
   });
 });
