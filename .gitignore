@@ -1,0 +1,6 @@
+dist
+node_modules
+.proj-track.json
+.proj-track.txt
+.proj-track.json.paused
+package-lock.json
