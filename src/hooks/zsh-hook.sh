@@ -1,8 +1,19 @@
 # --- proj-track hook start ---
 # AUTO-CAPTURE via preexec hook (Zsh native, no DEBUG trap)
 
+# Cleanup any previous installation from shell memory first
+if typeset -f __proj_track_preexec >/dev/null 2>&1; then
+  add-zsh-hook -d preexec __proj_track_preexec 2>/dev/null
+  unfunction __proj_track_preexec 2>/dev/null
+fi
+
 __proj_track_preexec() {
   local cmd="$1"
+
+  # Guard: if proj-track-logger is not installed, disable self
+  if ! command -v proj-track-logger >/dev/null 2>&1; then
+    return
+  fi
 
   # Skip empty
   [ -z "$cmd" ] && return

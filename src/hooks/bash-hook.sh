@@ -1,10 +1,23 @@
 # --- proj-track hook start ---
 # AUTO-CAPTURE via PROMPT_COMMAND (NOT DEBUG trap - doesn't break arrow keys)
 
+# Cleanup any previous installation from shell memory first
+if declare -f __proj_track_capture >/dev/null 2>&1; then
+  # Remove old function from PROMPT_COMMAND
+  PROMPT_COMMAND="${PROMPT_COMMAND//__proj_track_capture;/}"
+  PROMPT_COMMAND="${PROMPT_COMMAND//__proj_track_capture/}"
+  unset -f __proj_track_capture 2>/dev/null
+fi
+
 # Store the original PROMPT_COMMAND so we don't clobber it
 __proj_track_old_prompt="${PROMPT_COMMAND:-}"
 
 __proj_track_capture() {
+  # Guard: if proj-track-logger is not installed, disable self
+  if ! command -v proj-track-logger >/dev/null 2>&1; then
+    return
+  fi
+
   # Get the last command from bash history (strip leading number + spaces)
   local last_cmd
   last_cmd=$(HISTTIMEFORMAT='' builtin history 1 | sed 's/^[ ]*[0-9]*[ ]*//')

@@ -4,6 +4,8 @@ import { fileURLToPath } from 'node:url';
 
 const START_MARKER = '# --- proj-track hook start ---';
 const END_MARKER = '# --- proj-track hook end ---';
+const CLEANUP_START = '# --- proj-track cleanup start ---';
+const CLEANUP_END = '# --- proj-track cleanup end ---';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -51,7 +53,6 @@ function getHookContent(shell: 'bash' | 'zsh'): string {
     return fs.readFileSync(hookFile, 'utf-8');
   }
 
-  // Fallback: generate inline
   return shell === 'zsh' ? getInlineZshHook() : getInlineBashHook();
 }
 
@@ -59,9 +60,20 @@ function getInlineBashHook(): string {
   return `${START_MARKER}
 # AUTO-CAPTURE via PROMPT_COMMAND (NOT DEBUG trap - doesn't break arrow keys)
 
+# Cleanup any previous installation from shell memory first
+if declare -f __proj_track_capture >/dev/null 2>&1; then
+  PROMPT_COMMAND="\${PROMPT_COMMAND//__proj_track_capture;/}"
+  PROMPT_COMMAND="\${PROMPT_COMMAND//__proj_track_capture/}"
+  unset -f __proj_track_capture 2>/dev/null
+fi
+
 __proj_track_old_prompt="\${PROMPT_COMMAND:-}"
 
 __proj_track_capture() {
+  if ! command -v proj-track-logger >/dev/null 2>&1; then
+    return
+  fi
+
   local last_cmd
   last_cmd=$(HISTTIMEFORMAT='' builtin history 1 | sed 's/^[ ]*[0-9]*[ ]*//')
 
@@ -99,8 +111,17 @@ function getInlineZshHook(): string {
   return `${START_MARKER}
 # AUTO-CAPTURE via preexec hook (Zsh native, no DEBUG trap)
 
+if typeset -f __proj_track_preexec >/dev/null 2>&1; then
+  add-zsh-hook -d preexec __proj_track_preexec 2>/dev/null
+  unfunction __proj_track_preexec 2>/dev/null
+fi
+
 __proj_track_preexec() {
   local cmd="$1"
+
+  if ! command -v proj-track-logger >/dev/null 2>&1; then
+    return
+  fi
 
   [ -z "$cmd" ] && return
 
@@ -130,6 +151,48 @@ ${END_MARKER}`;
 }
 
 /**
+ * Generate a self-removing cleanup snippet for bash.
+ * When sourced, it unsets the function, removes itself from PROMPT_COMMAND,
+ * removes aliases, then deletes itself from the config file.
+ */
+function getBashCleanupSnippet(configPath: string): string {
+  return `
+${CLEANUP_START}
+# One-time cleanup: remove proj-track from live shell memory
+if declare -f __proj_track_capture >/dev/null 2>&1; then
+  PROMPT_COMMAND="\${PROMPT_COMMAND//__proj_track_capture;/}"
+  PROMPT_COMMAND="\${PROMPT_COMMAND//__proj_track_capture/}"
+  unset -f __proj_track_capture 2>/dev/null
+  unset __proj_track_old_prompt 2>/dev/null
+fi
+unalias thistory trun tclear tinit tremove tpause tresume 2>/dev/null
+# Auto-remove this cleanup block from ${configPath}
+if [ -f "${configPath}" ]; then
+  sed -i '/${CLEANUP_START.replace(/[.*+?^${}()|[\]\\\/]/g, '\\$&').replace(/\n/g, '\\n')}/,/${CLEANUP_END.replace(/[.*+?^${}()|[\]\\\/]/g, '\\$&').replace(/\n/g, '\\n')}/d' "${configPath}" 2>/dev/null
+fi
+${CLEANUP_END}`;
+}
+
+/**
+ * Generate a self-removing cleanup snippet for zsh.
+ */
+function getZshCleanupSnippet(configPath: string): string {
+  return `
+${CLEANUP_START}
+# One-time cleanup: remove proj-track from live shell memory
+if typeset -f __proj_track_preexec >/dev/null 2>&1; then
+  add-zsh-hook -d preexec __proj_track_preexec 2>/dev/null
+  unfunction __proj_track_preexec 2>/dev/null
+fi
+unalias thistory trun tclear tinit tremove tpause tresume 2>/dev/null
+# Auto-remove this cleanup block from ${configPath}
+if [ -f "${configPath}" ]; then
+  sed -i '/${CLEANUP_START.replace(/[.*+?^${}()|[\]\\\/]/g, '\\$&').replace(/\n/g, '\\n')}/,/${CLEANUP_END.replace(/[.*+?^${}()|[\]\\\/]/g, '\\$&').replace(/\n/g, '\\n')}/d' "${configPath}" 2>/dev/null
+fi
+${CLEANUP_END}`;
+}
+
+/**
  * Check if the hook is already installed in a config file.
  */
 function isInstalled(configPath: string): boolean {
@@ -147,9 +210,11 @@ export function installShellFunction(): string[] {
   const modified: string[] = [];
 
   for (const configPath of configs) {
+    // Remove any existing hook or cleanup snippet
     if (isInstalled(configPath)) {
       removeFromConfig(configPath);
     }
+    removeCleanupSnippet(configPath);
 
     const shell = configPath.endsWith('.zshrc') ? 'zsh' : 'bash';
     const hookContent = getHookContent(shell);
@@ -181,7 +246,27 @@ function removeFromConfig(configPath: string): void {
 }
 
 /**
+ * Remove the cleanup snippet from a config file.
+ */
+function removeCleanupSnippet(configPath: string): void {
+  if (!fs.existsSync(configPath)) return;
+
+  const content = fs.readFileSync(configPath, 'utf-8');
+  const startIdx = content.indexOf(CLEANUP_START);
+  const endIdx = content.indexOf(CLEANUP_END);
+
+  if (startIdx === -1 || endIdx === -1) return;
+
+  const before = content.substring(0, startIdx).replace(/\n+$/, '');
+  const after = content.substring(endIdx + CLEANUP_END.length).replace(/^\n+/, '');
+
+  const newContent = before + (after ? '\n' + after : '');
+  fs.writeFileSync(configPath, newContent, 'utf-8');
+}
+
+/**
  * Uninstall the shell hook from all config files.
+ * Adds a one-time cleanup snippet so `source ~/.bashrc` clears the live shell.
  * Returns the list of files that were modified.
  */
 export function uninstallShellFunction(): string[] {
@@ -191,6 +276,14 @@ export function uninstallShellFunction(): string[] {
   for (const configPath of configs) {
     if (isInstalled(configPath)) {
       removeFromConfig(configPath);
+
+      // Add self-removing cleanup snippet
+      const shell = configPath.endsWith('.zshrc') ? 'zsh' : 'bash';
+      const cleanup = shell === 'zsh'
+        ? getZshCleanupSnippet(configPath)
+        : getBashCleanupSnippet(configPath);
+      fs.appendFileSync(configPath, cleanup + '\n', 'utf-8');
+
       modified.push(configPath);
     }
   }
