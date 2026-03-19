@@ -14,7 +14,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "prepublishOnly": "npm run build",
-    "preuninstall": "proj-track uninstall || true"
+    "preuninstall": "node scripts/preuninstall.js || true"
   },
   "keywords": [
     "cli",
@@ -36,7 +36,8 @@
   },
   "files": [
     "dist",
-    "src/hooks"
+    "src/hooks",
+    "scripts"
   ],
   "engines": {
     "node": ">=18.0.0"
