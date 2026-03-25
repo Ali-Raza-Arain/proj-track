@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { jest } from '@jest/globals';
 import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
@@ -15,19 +15,19 @@ beforeEach(() => {
 afterEach(() => {
   process.chdir(originalCwd);
   fs.rmSync(tmpDir, { recursive: true, force: true });
-  vi.restoreAllMocks();
+  jest.restoreAllMocks();
 });
 
 describe('init command', () => {
   it('creates .proj-track.json in current directory', async () => {
     // Mock shell installer to avoid modifying real shell configs
-    vi.mock('../src/utils/shell-installer.js', () => ({
+    jest.unstable_mockModule('../src/utils/shell-installer.js', () => ({
       installShellFunction: () => [],
       isShellFunctionInstalled: () => true,
     }));
 
     const { initCommand } = await import('../src/commands/init.js');
-    const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    const consoleSpy = jest.spyOn(console, 'log').mockImplementation((() => {}) as any);
 
     await initCommand();
 
@@ -44,7 +44,7 @@ describe('pause command', () => {
     }));
 
     const { pauseCommand } = await import('../src/commands/pause.js');
-    const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    const consoleSpy = jest.spyOn(console, 'log').mockImplementation((() => {}) as any);
 
     await pauseCommand();
 
@@ -57,7 +57,7 @@ describe('pause command', () => {
     fs.writeFileSync(path.join(tmpDir, '.proj-track.json.paused'), '{}');
 
     const { pauseCommand } = await import('../src/commands/pause.js');
-    const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    const consoleSpy = jest.spyOn(console, 'log').mockImplementation((() => {}) as any);
 
     await pauseCommand();
 
@@ -74,7 +74,7 @@ describe('resume command', () => {
     }));
 
     const { resumeCommand } = await import('../src/commands/resume.js');
-    const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    const consoleSpy = jest.spyOn(console, 'log').mockImplementation((() => {}) as any);
 
     await resumeCommand();
 
@@ -94,7 +94,7 @@ describe('remove command', () => {
     }));
 
     const { removeCommand } = await import('../src/commands/remove.js');
-    const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    const consoleSpy = jest.spyOn(console, 'log').mockImplementation((() => {}) as any);
 
     await removeCommand();
 
@@ -114,7 +114,7 @@ describe('remove command', () => {
     }));
 
     const { removeCommand } = await import('../src/commands/remove.js');
-    const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    const consoleSpy = jest.spyOn(console, 'log').mockImplementation((() => {}) as any);
 
     await removeCommand();
 
@@ -138,7 +138,7 @@ describe('clear command', () => {
     }));
 
     const { clearCommand } = await import('../src/commands/clear.js');
-    const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    const consoleSpy = jest.spyOn(console, 'log').mockImplementation((() => {}) as any);
 
     await clearCommand();
 
@@ -157,7 +157,7 @@ describe('list command', () => {
     }));
 
     const { listCommand } = await import('../src/commands/list.js');
-    const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    const consoleSpy = jest.spyOn(console, 'log').mockImplementation((() => {}) as any);
 
     await listCommand();
 
@@ -178,7 +178,7 @@ describe('list command', () => {
     }));
 
     const { listCommand } = await import('../src/commands/list.js');
-    const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    const consoleSpy = jest.spyOn(console, 'log').mockImplementation((() => {}) as any);
 
     await listCommand();
 

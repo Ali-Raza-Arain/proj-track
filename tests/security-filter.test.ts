@@ -1,4 +1,3 @@
-import { describe, it, expect } from 'vitest';
 import { isSensitive, isNoiseCommand } from '../src/utils/security-filter.js';
 
 describe('isSensitive', () => {

@@ -11,28 +11,61 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
-    "test": "vitest run",
-    "test:watch": "vitest",
+    "test": "NODE_OPTIONS='--experimental-vm-modules' jest",
+    "test:watch": "NODE_OPTIONS='--experimental-vm-modules' jest --watch",
+    "lint": "tsc --noEmit",
     "prepublishOnly": "npm run build",
-    "preuninstall": "node scripts/preuninstall.js || true"
+    "preuninstall": "node scripts/preuninstall.js || true",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
   },
   "keywords": [
     "cli",
     "command-history",
     "project-tracker",
     "terminal",
-    "developer-tools"
+    "developer-tools",
+    "shell-history",
+    "bash",
+    "zsh",
+    "auto-capture",
+    "prompt-command",
+    "devtools",
+    "command-logger",
+    "project-history",
+    "workflow",
+    "productivity",
+    "shell-hook",
+    "terminal-history",
+    "command-tracking",
+    "nodejs",
+    "typescript"
   ],
-  "author": "Ali Raza",
+  "author": {
+    "name": "Ali Raza",
+    "url": "https://github.com/Ali-Raza-Arain"
+  },
+  "homepage": "https://Ali-Raza-Arain.github.io/proj-track/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ali-Raza-Arain/proj-track.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Ali-Raza-Arain/proj-track/issues"
+  },
   "license": "MIT",
   "dependencies": {
     "chalk": "^5.3.0",
     "commander": "^12.1.0"
   },
   "devDependencies": {
+    "@types/jest": "^30.0.0",
     "@types/node": "^22.0.0",
+    "jest": "^30.3.0",
+    "ts-jest": "^29.4.6",
     "typescript": "^5.6.0",
-    "vitest": "^2.1.0"
+    "vitepress": "^1.6.4"
   },
   "files": [
     "dist",

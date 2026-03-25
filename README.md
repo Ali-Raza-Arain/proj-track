@@ -1,14 +1,87 @@
-# proj-track
+<p align="center">
+  <img src="https://img.shields.io/npm/v/proj-track?style=for-the-badge&color=blue&label=proj-track" alt="version" />
+</p>
 
-**Auto-capture** CLI command history **per-project** with zero terminal interference.
+<h1 align="center">proj-track</h1>
 
-Commands are tracked automatically when you press Enter. No manual typing needed. No background job messages. No arrow key issues. No Ctrl+C conflicts.
+<p align="center">
+  <strong>Silently track every terminal command per project — auto-captured, filtered, and instantly replayable.</strong><br/>
+  Auto-capture CLI command history per-project with zero terminal interference.
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="license" />
+  <img src="https://img.shields.io/badge/node-%3E%3D18-brightgreen" alt="node" />
+  <img src="https://img.shields.io/badge/TypeScript-5.x-blue" alt="typescript" />
+  <img src="https://img.shields.io/badge/tests-passing-green" alt="tests" />
+  <a href="https://codecov.io/gh/Ali-Raza-Arain/proj-track"><img src="https://codecov.io/gh/Ali-Raza-Arain/proj-track/branch/main/graph/badge.svg" alt="codecov" /></a>
+</p>
+
+---
+
+## The Problem
+
+Your shell history is global. It mixes commands from every project into one giant, unsearchable list. When you switch between projects, you can't remember the exact `docker-compose` flags, the migration command, or the deployment script you used last week.
+
+Existing solutions require you to manually type `track "your command"` every time — adding friction to your workflow and guaranteeing you'll forget.
+
+---
+
+## Why proj-track?
+
+- **Zero-config auto-capture** — Commands are captured when you press Enter. No wrapping, no prefixes.
+- **Per-project isolation** — Each project gets its own history in `.proj-track.json`.
+- **Zero terminal interference** — No `[1]+ Done` messages, no broken arrow keys, no Ctrl+C conflicts.
+- **Smart filtering** — Noise commands (cd, ls, clear) and sensitive data (passwords, tokens, API keys) are automatically skipped.
+- **Instant replay** — Re-run any tracked command by its ID.
+- **Bash + Zsh** — Works with both shells out of the box.
+
+---
+
+## Table of Contents
+
+- [How It Works](#how-it-works)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [Commands](#commands)
+- [Smart Filtering](#smart-filtering)
+- [Zero Interference Guarantee](#zero-interference-guarantee)
+- [Data Storage](#data-storage)
+- [Comparison with Alternatives](#comparison-with-alternatives)
+- [Running Tests](#running-tests)
+- [Contributing](#contributing)
+- [Security](#security)
+- [Support](#support)
+- [License](#license)
+
+---
+
+## How It Works
+
+```
+┌──────────────┐     ┌─────────────────────┐     ┌───────────────────┐
+│  You type a  │────>│  Shell hook fires   │────>│  Silent logger    │
+│   command    │     │  (PROMPT_COMMAND /  │     │  saves to         │
+│              │     │   preexec)          │     │  .proj-track.json │
+└──────────────┘     └─────────────────────┘     └───────────────────┘
+```
+
+| Shell | Hook | Why |
+| :--- | :--- | :--- |
+| **Bash** | `PROMPT_COMMAND` | Fires AFTER each command, doesn't intercept input |
+| **Zsh** | `preexec` | Native Zsh hook, fires before command execution |
+
+**Why not `DEBUG` trap?** The `DEBUG` trap fires on every keystroke/expansion and breaks arrow keys in VS Code Terminal. `PROMPT_COMMAND` only fires once after the command completes — no interference.
+
+---
 
 ## Installation
 
 ```bash
 npm install -g proj-track
 ```
+
+---
 
 ## Quick Start
 
@@ -31,24 +104,38 @@ proj-track list
 
 That's it. No `track "command"` needed. Everything is captured silently in the background.
 
-## How It Works
+---
 
-### Auto-Capture Architecture
+## Commands
 
-| Shell | Hook | Why |
+| Command | Alias | Description |
 | :--- | :--- | :--- |
-| **Bash** | `PROMPT_COMMAND` | Fires AFTER each command, doesn't intercept input |
-| **Zsh** | `preexec` | Native Zsh hook, fires before command execution |
+| `proj-track init` | `tinit` | Initialize tracking in current project |
+| `proj-track list` | `thistory` | Show tracked commands |
+| `proj-track run <id>` | `trun <id>` | Re-run a command by its ID |
+| `proj-track clear` | `tclear` | Clear command history |
+| `proj-track pause` | `tpause` | Pause auto-capture |
+| `proj-track resume` | `tresume` | Resume auto-capture |
+| `proj-track remove` | `tremove` | Remove tracking (saves history as `.txt`) |
+| `proj-track install` | — | Install shell hook to `.bashrc`/`.zshrc` |
+| `proj-track uninstall` | — | Remove shell hook |
 
-**Why not `DEBUG` trap?** The `DEBUG` trap fires on every keystroke/expansion and breaks arrow keys in VS Code Terminal. `PROMPT_COMMAND` only fires once after the command completes — no interference.
+### Pause / Resume
 
-### What Gets Captured
+```bash
+proj-track pause     # Stops auto-capture, preserves history
+proj-track resume    # Resumes auto-capture
+```
 
-Commands are auto-captured when:
-- You're in a **project directory** (has `.git/`, `package.json`, or `.proj-track.json`)
-- The command is **not noise** (cd, ls, clear, echo, cat, pwd, etc. are skipped)
-- The command is **not sensitive** (passwords, tokens, secrets are filtered)
-- The command is **not a duplicate** of the previous entry
+### Remove
+
+```bash
+proj-track remove    # Converts history to .proj-track.txt and disables tracking
+```
+
+---
+
+## Smart Filtering
 
 ### Project Detection
 
@@ -60,60 +147,26 @@ Commands are auto-captured when:
 
 If none of these exist, proj-track silently does nothing.
 
-## Commands
+### Noise Commands (skipped automatically)
 
-| Command | Alias | Description |
-| :--- | :--- | :--- |
-| `proj-track list` | `thistory` | Show tracked commands |
-| `proj-track run <id>` | `trun <id>` | Re-run a command by its ID |
-| `proj-track clear` | `tclear` | Clear command history |
-| `proj-track init` | `tinit` | Initialize tracking in current project |
-| `proj-track pause` | `tpause` | Pause auto-capture |
-| `proj-track resume` | `tresume` | Resume auto-capture |
-| `proj-track remove` | `tremove` | Remove tracking (saves history as `.txt`) |
-| `proj-track install` | — | Install shell hook to `.bashrc`/`.zshrc` |
-| `proj-track uninstall` | — | Remove shell hook |
+`cd`, `ls`, `clear`, `echo`, `cat`, `pwd`, `exit`, `history`, `which`, `whoami`
 
-## Features
+### Sensitive Commands (never saved)
 
-### Pause / Resume
-
-```bash
-proj-track pause     # Stops auto-capture, preserves history
-proj-track resume    # Resumes auto-capture
-```
-
-When paused, `.proj-track.json` is renamed to `.proj-track.json.paused`.
-
-### Remove
-
-```bash
-proj-track remove
-```
-
-Converts `.proj-track.json` to `.proj-track.txt` (plain text backup) and disables tracking.
-
-### Smart Filtering
-
-**Noise commands** (skipped automatically):
-- `cd`, `ls`, `clear`, `echo`, `cat`, `pwd`, `exit`, `history`, `which`, `whoami`
-
-**Sensitive commands** (never saved):
 - Commands containing `password`, `secret`, `token`, `api_key`, `credential`
 - Inline assignments like `PASSWORD=123 ./run.sh`
 - MySQL password flags (`-p`)
 
-**Internal commands** (filtered):
+### Internal Commands (filtered)
+
 - VS Code's `__vsc_*` terminal commands
 - Any `__proj_*` or `__git_*` internal commands
 
 ### Deduplication
 
-Running the same command consecutively only creates one history entry.
+Running the same command consecutively only creates one history entry. Maximum 50 commands per project.
 
-### History Limit
-
-Only the last 50 commands are kept per project.
+---
 
 ## Zero Interference Guarantee
 
@@ -126,6 +179,8 @@ Only the last 50 commands are kept per project.
 | Command echoing | Logger suppresses all stdout/stderr |
 | Shell startup time | One function + aliases, minimal overhead |
 | Existing PROMPT_COMMAND | Chains with existing value, doesn't overwrite |
+
+---
 
 ## Data Storage
 
@@ -146,51 +201,53 @@ All data is stored locally in `.proj-track.json` in each project directory:
 
 No data leaves your machine. No cloud. No telemetry.
 
-## Troubleshooting
+---
 
-### Commands not being auto-captured
+## Comparison with Alternatives
 
-1. Make sure the hook is installed: `proj-track install && source ~/.bashrc`
-2. Make sure you're in a project directory (has `.git/`, `package.json`, or `.proj-track.json`)
-3. Check if tracking is paused: look for `.proj-track.json.paused`
-4. Noise commands (cd, ls, clear, etc.) are intentionally skipped
-5. Sensitive commands (containing passwords/tokens) are silently filtered
+| Feature | proj-track | Manual `history \| grep` | Custom bash scripts |
+| :--- | :---: | :---: | :---: |
+| Auto-capture | Yes | No | Varies |
+| Per-project isolation | Yes | No | Manual |
+| Zero terminal interference | Yes | N/A | No |
+| Noise filtering | Yes | No | Manual |
+| Sensitive data filtering | Yes | No | No |
+| Instant replay | Yes | No | No |
+| Bash + Zsh | Yes | Bash only | Varies |
+| No config needed | Yes | N/A | No |
 
-### `[1]+ Done` messages appearing
+For a detailed comparison, see the [docs](https://Ali-Raza-Arain.github.io/proj-track/guide/comparison).
 
-This shouldn't happen. If it does, reinstall the hook:
-```bash
-proj-track install
-source ~/.bashrc
-```
+---
 
-### Arrow keys not working
-
-This should NOT happen with proj-track (we use `PROMPT_COMMAND`, not `DEBUG` trap). If you experience issues, check for other tools using `DEBUG` trap:
-```bash
-trap -p DEBUG
-```
-
-### Hook not updating after upgrade
+## Running Tests
 
 ```bash
-proj-track install    # Re-installs the hook
-source ~/.bashrc      # Reload
+npm test
 ```
 
-## Uninstall
+---
 
-```bash
-# Remove shell hook
-proj-track uninstall
+## Contributing
 
-# Remove the global package
-npm uninstall -g proj-track
+Contributions are welcome! Please read the [Contributing Guide](CONTRIBUTING.md) and follow our [Code of Conduct](CODE_OF_CONDUCT.md).
 
-# Optionally remove project history files
-rm .proj-track.json
-```
+---
+
+## Security
+
+To report vulnerabilities, please see our [Security Policy](SECURITY.md).
+
+---
+
+## Support
+
+- [Documentation](https://Ali-Raza-Arain.github.io/proj-track/)
+- [GitHub Issues](https://github.com/Ali-Raza-Arain/proj-track/issues)
+- [Buy Me a Coffee](https://buymeacoffee.com/alirazaarain)
+
+---
 
 ## License
 
-MIT
+[MIT](https://opensource.org/licenses/MIT) — Made by [Ali Raza](https://github.com/Ali-Raza-Arain)
