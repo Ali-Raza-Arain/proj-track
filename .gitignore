@@ -1,5 +1,10 @@
 dist
 node_modules
+*.tgz
+.env
+*.log
+docs/.vitepress/cache/
+coverage
 .proj-track.json
 .proj-track.txt
 .proj-track.json.paused
