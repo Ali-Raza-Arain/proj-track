@@ -8,7 +8,6 @@ coverage
 .proj-track.json
 .proj-track.txt
 .proj-track.json.paused
-package-lock.json
 .proj-track-disabled
 REPLICATION_*.md
 todo
