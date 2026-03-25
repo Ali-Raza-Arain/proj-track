@@ -1,7 +1,7 @@
 {
   "name": "proj-track",
   "version": "1.0.0",
-  "description": "Track CLI command history per-project with zero terminal interference",
+  "description": "Auto-capture CLI command history per-project with zero terminal interference.",
   "type": "module",
   "main": "dist/index.js",
   "bin": {

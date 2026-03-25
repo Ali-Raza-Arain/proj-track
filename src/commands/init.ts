@@ -13,6 +13,12 @@ export async function initCommand(): Promise<void> {
 
   if (fs.existsSync(configPath)) {
     console.log(chalk.yellow('proj-track is already initialized in this project.'));
+
+    // Check if hook is missing from shell config
+    if (!isShellFunctionInstalled()) {
+      console.log(chalk.red('  But the shell hook is NOT installed in your .bashrc/.zshrc!'));
+      console.log(chalk.cyan('  Run: ') + chalk.white('proj-track install'));
+    }
     return;
   }
 
