@@ -10,10 +10,10 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge" alt="license" />
-  <img src="https://img.shields.io/badge/node-%3E%3D18-brightgreen?style=for-the-badge" alt="node" />
-  <img src="https://img.shields.io/badge/TypeScript-5.x-blue?style=for-the-badge&logo=typescript&logoColor=white" alt="typescript" />
-  <img src="https://img.shields.io/badge/tests-52%20passed-green?style=for-the-badge&logo=jest&logoColor=white" alt="tests" />
+  <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="license" />
+  <img src="https://img.shields.io/badge/node-%3E%3D18-brightgreen" alt="node" />
+  <img src="https://img.shields.io/badge/TypeScript-5.x-blue" alt="typescript" />
+  <img src="https://img.shields.io/badge/tests-52%20passed-green" alt="tests" />
   <a href="https://codecov.io/gh/Ali-Raza-Arain/proj-track"><img src="https://codecov.io/gh/Ali-Raza-Arain/proj-track/branch/main/graph/badge.svg?style=for-the-badge" alt="codecov" /></a>
 </p>
 

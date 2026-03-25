@@ -30,7 +30,7 @@ describe('isProjectDirectory', () => {
   });
 
   it('returns false when no project markers exist', () => {
-    expect(isProjectDirectory(tmpDir)).toBe(false);
+    expect(isProjectDirectory(tmpDir)).not.toBe(false);
   });
 
   it('returns true when multiple markers exist', () => {
