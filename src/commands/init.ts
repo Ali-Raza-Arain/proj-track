@@ -3,6 +3,7 @@ import path from 'node:path';
 import chalk from 'chalk';
 import { readHistory, writeHistory } from '../utils/file-handler.js';
 import { installShellFunction, isShellFunctionInstalled } from '../utils/shell-installer.js';
+import { addToGitignore } from './gitignore.js';
 
 /**
  * Initialize proj-track in the current project.
@@ -38,6 +39,15 @@ export async function initCommand(): Promise<void> {
   // Create initial history file
   const history = readHistory();
   writeHistory(history);
+
+  // Auto-add to .gitignore if it exists
+  const gitignorePath = path.join(process.cwd(), '.gitignore');
+  if (fs.existsSync(gitignorePath)) {
+    const { added } = addToGitignore();
+    if (added.length > 0) {
+      console.log(chalk.green('✓ Added proj-track files to .gitignore'));
+    }
+  }
 
   console.log(chalk.green('✓ proj-track initialized in this project.'));
   console.log(chalk.dim(`  Created ${configPath}`));

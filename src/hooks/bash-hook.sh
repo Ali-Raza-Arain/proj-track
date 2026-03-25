@@ -59,7 +59,7 @@ fi
 # Tab completion
 _proj_track_completions() {
   local cur="${COMP_WORDS[COMP_CWORD]}"
-  local commands="init list run clear pause resume remove install uninstall"
+  local commands="init list run clear pause resume remove gitignore install uninstall"
   COMPREPLY=($(compgen -W "$commands" -- "$cur"))
 }
 complete -F _proj_track_completions proj-track

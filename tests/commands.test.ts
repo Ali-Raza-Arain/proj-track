@@ -149,6 +149,93 @@ describe('clear command', () => {
   });
 });
 
+describe('gitignore command', () => {
+  it('creates .gitignore and adds all entries when file does not exist', async () => {
+    const { addToGitignore } = await import('../src/commands/gitignore.js');
+
+    const result = addToGitignore(tmpDir);
+
+    expect(result.added).toEqual([
+      '.proj-track.json',
+      '.proj-track.json.paused',
+      '.proj-track.txt',
+      '.proj-track-disabled',
+    ]);
+    expect(result.alreadyPresent).toEqual([]);
+
+    const content = fs.readFileSync(path.join(tmpDir, '.gitignore'), 'utf-8');
+    expect(content).toContain('# proj-track');
+    expect(content).toContain('.proj-track.json');
+    expect(content).toContain('.proj-track-disabled');
+  });
+
+  it('appends only missing entries when .gitignore already has some', async () => {
+    fs.writeFileSync(path.join(tmpDir, '.gitignore'), 'node_modules\n.proj-track.json\n');
+
+    const { addToGitignore } = await import('../src/commands/gitignore.js');
+    const result = addToGitignore(tmpDir);
+
+    expect(result.added).toEqual([
+      '.proj-track.json.paused',
+      '.proj-track.txt',
+      '.proj-track-disabled',
+    ]);
+    expect(result.alreadyPresent).toEqual(['.proj-track.json']);
+
+    const content = fs.readFileSync(path.join(tmpDir, '.gitignore'), 'utf-8');
+    expect(content).toContain('node_modules');
+    expect(content).toContain('.proj-track.json.paused');
+  });
+
+  it('does nothing when all entries already present', async () => {
+    const initial = '# proj-track\n.proj-track.json\n.proj-track.json.paused\n.proj-track.txt\n.proj-track-disabled\n';
+    fs.writeFileSync(path.join(tmpDir, '.gitignore'), initial);
+
+    const { addToGitignore } = await import('../src/commands/gitignore.js');
+    const result = addToGitignore(tmpDir);
+
+    expect(result.added).toEqual([]);
+    expect(result.alreadyPresent).toHaveLength(4);
+
+    const content = fs.readFileSync(path.join(tmpDir, '.gitignore'), 'utf-8');
+    expect(content).toBe(initial);
+  });
+
+  it('init auto-adds to .gitignore when .gitignore exists', async () => {
+    fs.writeFileSync(path.join(tmpDir, '.gitignore'), 'node_modules\n');
+
+    jest.unstable_mockModule('../src/utils/shell-installer.js', () => ({
+      installShellFunction: () => [],
+      isShellFunctionInstalled: () => true,
+    }));
+
+    const { initCommand } = await import('../src/commands/init.js');
+    const consoleSpy = jest.spyOn(console, 'log').mockImplementation((() => {}) as any);
+
+    await initCommand();
+
+    const content = fs.readFileSync(path.join(tmpDir, '.gitignore'), 'utf-8');
+    expect(content).toContain('.proj-track.json');
+    expect(content).toContain('.proj-track-disabled');
+    consoleSpy.mockRestore();
+  });
+
+  it('init skips .gitignore when file does not exist', async () => {
+    jest.unstable_mockModule('../src/utils/shell-installer.js', () => ({
+      installShellFunction: () => [],
+      isShellFunctionInstalled: () => true,
+    }));
+
+    const { initCommand } = await import('../src/commands/init.js');
+    const consoleSpy = jest.spyOn(console, 'log').mockImplementation((() => {}) as any);
+
+    await initCommand();
+
+    expect(fs.existsSync(path.join(tmpDir, '.gitignore'))).toBe(false);
+    consoleSpy.mockRestore();
+  });
+});
+
 describe('list command', () => {
   it('shows message when no commands tracked', async () => {
     fs.writeFileSync(path.join(tmpDir, '.proj-track.json'), JSON.stringify({

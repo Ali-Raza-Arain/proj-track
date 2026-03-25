@@ -53,6 +53,7 @@ _proj_track_completions() {
     'pause:Pause tracking in the current project'
     'resume:Resume tracking in the current project'
     'remove:Remove proj-track from the current project'
+    'gitignore:Add proj-track files to .gitignore'
     'install:Install the shell function to .bashrc/.zshrc'
     'uninstall:Remove the shell function from .bashrc/.zshrc'
   )

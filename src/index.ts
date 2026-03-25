@@ -8,6 +8,7 @@ import { clearCommand } from './commands/clear.js';
 import { pauseCommand } from './commands/pause.js';
 import { resumeCommand } from './commands/resume.js';
 import { removeCommand } from './commands/remove.js';
+import { gitignoreCommand } from './commands/gitignore.js';
 import { installShellFunction, uninstallShellFunction } from './utils/shell-installer.js';
 import { getBanner } from './ui/banner.js';
 import chalk from 'chalk';
@@ -54,6 +55,11 @@ program
   .command('remove')
   .description('Remove proj-track from the current project (saves history as .txt)')
   .action(removeCommand);
+
+program
+  .command('gitignore')
+  .description('Add proj-track files to .gitignore')
+  .action(gitignoreCommand);
 
 program
   .command('install')
