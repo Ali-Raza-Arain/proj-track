@@ -43,6 +43,23 @@ __proj_track_preexec() {
 autoload -Uz add-zsh-hook
 add-zsh-hook preexec __proj_track_preexec
 
+# Tab completion
+_proj_track_completions() {
+  local commands=(
+    'init:Initialize proj-track in the current project'
+    'list:List tracked commands'
+    'run:Re-run a tracked command by its ID'
+    'clear:Clear command history'
+    'pause:Pause tracking in the current project'
+    'resume:Resume tracking in the current project'
+    'remove:Remove proj-track from the current project'
+    'install:Install the shell function to .bashrc/.zshrc'
+    'uninstall:Remove the shell function from .bashrc/.zshrc'
+  )
+  _describe 'command' commands
+}
+compdef _proj_track_completions proj-track 2>/dev/null
+
 # Convenience aliases
 alias thistory='proj-track list 2>/dev/null'
 alias trun='proj-track run'

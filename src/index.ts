@@ -9,6 +9,7 @@ import { pauseCommand } from './commands/pause.js';
 import { resumeCommand } from './commands/resume.js';
 import { removeCommand } from './commands/remove.js';
 import { installShellFunction, uninstallShellFunction } from './utils/shell-installer.js';
+import { getBanner } from './ui/banner.js';
 import chalk from 'chalk';
 
 const program = new Command();
@@ -16,7 +17,8 @@ const program = new Command();
 program
   .name('proj-track')
   .description('Track CLI command history per-project with zero terminal interference')
-  .version('1.0.0');
+  .version('1.0.0')
+  .addHelpText('beforeAll', getBanner('1.0.0'));
 
 program
   .command('init')

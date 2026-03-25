@@ -56,6 +56,14 @@ else
   PROMPT_COMMAND='__proj_track_capture'
 fi
 
+# Tab completion
+_proj_track_completions() {
+  local cur="${COMP_WORDS[COMP_CWORD]}"
+  local commands="init list run clear pause resume remove install uninstall"
+  COMPREPLY=($(compgen -W "$commands" -- "$cur"))
+}
+complete -F _proj_track_completions proj-track
+
 # Convenience aliases (manual commands still available)
 alias thistory='proj-track list 2>/dev/null'
 alias trun='proj-track run'
