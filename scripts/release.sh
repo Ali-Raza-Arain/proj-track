@@ -13,7 +13,7 @@ echo "==> Running lint..."
 npm run lint
 
 echo "==> Running tests with coverage..."
-npx jest --coverage --coverageReporters=text
+npm test -- --coverage
 echo ""
 
 echo "==> Building package..."

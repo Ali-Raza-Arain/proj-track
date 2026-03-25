@@ -230,7 +230,12 @@ npm test
 
 ## Contributing
 
-Contributions are welcome! Please read the [Contributing Guide](CONTRIBUTING.md) and follow our [Code of Conduct](CODE_OF_CONDUCT.md).
+We welcome contributions! Please read the [Contributing Guide](CONTRIBUTING.md) before submitting a PR.
+
+- [Code of Conduct](CODE_OF_CONDUCT.md)
+- [Security Policy](SECURITY.md)
+
+Look for issues labeled [`good first issue`](https://github.com/Ali-Raza-Arain/proj-track/labels/good%20first%20issue) to get started.
 
 ---
 
@@ -242,9 +247,22 @@ To report vulnerabilities, please see our [Security Policy](SECURITY.md).
 
 ## Support
 
-- [Documentation](https://Ali-Raza-Arain.github.io/proj-track/)
-- [GitHub Issues](https://github.com/Ali-Raza-Arain/proj-track/issues)
-- [Buy Me a Coffee](https://buymeacoffee.com/alirazaarain)
+If this package helps you, consider supporting its development:
+
+<a href="https://github.com/sponsors/Ali-Raza-Arain">
+  <img src="https://img.shields.io/badge/Sponsor_on_GitHub-EA4AAA?style=for-the-badge&logo=github-sponsors&logoColor=white" alt="GitHub Sponsors" />
+</a>
+<a href="https://buymeacoffee.com/alirazaarain">
+  <img src="https://img.shields.io/badge/Buy_Me_a_Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black" alt="Buy Me a Coffee" />
+</a>
+
+---
+
+## Contributors
+
+<a href="https://github.com/Ali-Raza-Arain/proj-track/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=Ali-Raza-Arain/proj-track" alt="Contributors" />
+</a>
 
 ---
 
