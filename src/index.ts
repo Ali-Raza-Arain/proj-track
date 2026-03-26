@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { Command } from 'commander';
+import { createRequire } from 'module';
 import { initCommand } from './commands/init.js';
 import { listCommand } from './commands/list.js';
 import { runCommand } from './commands/run.js';
@@ -10,16 +11,32 @@ import { resumeCommand } from './commands/resume.js';
 import { removeCommand } from './commands/remove.js';
 import { gitignoreCommand } from './commands/gitignore.js';
 import { installShellFunction, uninstallShellFunction } from './utils/shell-installer.js';
-import { getBanner } from './ui/banner.js';
+import { getFullHelp } from './ui/banner.js';
 import chalk from 'chalk';
+
+const require = createRequire(import.meta.url);
+const { version } = require('../package.json');
 
 const program = new Command();
 
 program
   .name('proj-track')
   .description('Track CLI command history per-project with zero terminal interference')
-  .version('1.0.0')
-  .addHelpText('beforeAll', getBanner('1.0.0'));
+  .version(version, '-V, --version')
+  .helpOption(false)
+  .addHelpCommand(false);
+
+// Custom --help flag
+program.option('-h, --help', 'Display help for command');
+program.on('option:help', () => {
+  console.log(getFullHelp(version));
+  process.exit(0);
+});
+
+// Show custom help when no args
+program.action(() => {
+  console.log(getFullHelp(version));
+});
 
 program
   .command('init')
