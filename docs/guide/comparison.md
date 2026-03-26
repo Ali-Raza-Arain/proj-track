@@ -12,6 +12,7 @@
 | Deduplication | Yes | No | No | No |
 | Instant replay by ID | Yes | No | No | No |
 | Pause/resume | Yes | No | No | No |
+| Auto `.gitignore` | Yes | No | No | No |
 | Export to plain text | Yes | No | No | No |
 | Bash + Zsh | Yes | Bash only | Varies | Varies |
 | No config needed | Yes | N/A | No | No |

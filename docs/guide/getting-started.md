@@ -57,6 +57,7 @@ The hook uses `PROMPT_COMMAND` (bash) or `preexec` (zsh) to silently capture eve
 | `proj-track pause` | `tpause` | Pause auto-capture |
 | `proj-track resume` | `tresume` | Resume auto-capture |
 | `proj-track remove` | `tremove` | Remove tracking (saves history as `.txt`) |
+| `proj-track gitignore` | — | Add proj-track files to `.gitignore` |
 | `proj-track install` | — | Install shell hook to `.bashrc`/`.zshrc` |
 | `proj-track uninstall` | — | Remove shell hook |
 

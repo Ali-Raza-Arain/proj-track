@@ -118,6 +118,7 @@ That's it. No `track "command"` needed. Everything is captured silently in the b
 | `proj-track pause` | `tpause` | Pause auto-capture |
 | `proj-track resume` | `tresume` | Resume auto-capture |
 | `proj-track remove` | `tremove` | Remove tracking (saves history as `.txt`) |
+| `proj-track gitignore` | — | Add proj-track files to `.gitignore` |
 | `proj-track install` | — | Install shell hook to `.bashrc`/`.zshrc` |
 | `proj-track uninstall` | — | Remove shell hook |
 

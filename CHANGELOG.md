@@ -4,6 +4,26 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.0.1] - 2026-03-26
+
+### Added
+- `proj-track gitignore` command — add proj-track files to `.gitignore`
+- Auto-add to `.gitignore` during `proj-track init` (when `.gitignore` exists)
+- Professional table output for `proj-track list` using `cli-table3`
+- Redesigned `--help` with grouped commands, quick start examples, and links footer
+- Dynamic version reading from `package.json` in CLI and docs
+- Version badge in VitePress docs navigation
+- Tab completion for the `gitignore` command (bash + zsh)
+
+### Changed
+- Command IDs are now auto-incrementing (1, 2, 3...) instead of timestamp-based
+- `proj-track list` timestamps now display in short `MM/DD HH:MM` format
+- Long commands are truncated at 50 characters with `...` in list output
+- Running `proj-track` with no arguments now shows the full help
+
+### Fixed
+- ID column alignment in `proj-track list` when IDs have varying widths
+
 ## [1.0.0] - 2026-03-25
 
 ### Added

@@ -20,7 +20,7 @@ Initialize proj-track in the current project directory.
 
 Display all tracked commands for the current project, showing:
 
-- Command ID (timestamp-based)
+- Command ID (auto-incrementing)
 - The command string
 - Timestamp of when the command was captured
 
@@ -58,6 +58,20 @@ Remove tracking from the current project:
 2. Deletes `.proj-track.json` (or `.proj-track.json.paused`)
 3. Creates `.proj-track-disabled` marker to permanently prevent tracking
 
+### `proj-track gitignore`
+
+Add proj-track files to `.gitignore`. Creates the file if it doesn't exist, appends only missing entries.
+
+Files added:
+- `.proj-track.json`
+- `.proj-track.json.paused`
+- `.proj-track.txt`
+- `.proj-track-disabled`
+
+::: tip
+Running `proj-track init` in a directory that already has a `.gitignore` will automatically add these entries.
+:::
+
 ### `proj-track install`
 
 Install the auto-capture shell hook into `.bashrc` and/or `.zshrc`. Run this after a fresh install or if the hook is missing.
@@ -75,7 +89,7 @@ Remove the auto-capture shell hook from `.bashrc` and `.zshrc`.
   "projectName": "my-project",
   "commands": [
     {
-      "id": 1710864000000,
+      "id": 1,
       "command": "docker-compose up -d",
       "timestamp": "3/19/2026, 8:00:00 PM"
     }
@@ -87,7 +101,7 @@ Remove the auto-capture shell hook from `.bashrc` and `.zshrc`.
 | :--- | :--- | :--- |
 | `projectName` | `string` | Derived from the directory name |
 | `commands` | `array` | List of tracked commands (max 50) |
-| `commands[].id` | `number` | Timestamp-based unique ID |
+| `commands[].id` | `number` | Auto-incrementing unique ID (1, 2, 3...) |
 | `commands[].command` | `string` | The captured command string |
 | `commands[].timestamp` | `string` | Human-readable timestamp |
 

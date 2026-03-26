@@ -8,6 +8,7 @@
 - **Configurable noise list** — Allow users to customize which commands are considered noise
 - **Configurable history limit** — Allow changing the 50-command maximum per project
 - **Fish shell support** — Extend auto-capture to Fish shell
+- **Interactive selection** — Select and run commands interactively with arrow keys
 
 ### Medium-term
 
@@ -15,6 +16,7 @@
 - **Multi-project view** — View command history across all tracked projects
 - **Export formats** — Export history to CSV, JSON, or Markdown
 - **Timestamp-based filtering** — Filter commands by date range
+- **Clipboard copy** — Copy a command to clipboard from the list
 
 ### Long-term
 

@@ -100,6 +100,7 @@ chore: update dependencies
 src/            # Source code (TypeScript)
   commands/     # CLI command handlers
   hooks/        # Shell hook scripts (bash/zsh)
+  ui/           # CLI output formatting (banner, help)
   utils/        # Utility modules
 dist/           # Build output (do not edit)
 docs/           # VitePress documentation site

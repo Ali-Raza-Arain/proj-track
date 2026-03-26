@@ -1,16 +1,20 @@
 import chalk from 'chalk';
 
 export function getBanner(version: string): string {
-  const w = 57;
+  const w = 55;
   const hr = '─'.repeat(w + 2);
 
-  const pad = (raw: string, styled: string) =>
-    styled + ' '.repeat(Math.max(0, w - raw.length));
+  const center = (raw: string, styled: string) => {
+    const totalPadding = w - raw.length;
+    const leftPadding = Math.floor(totalPadding / 2);
+    const rightPadding = Math.ceil(totalPadding / 2);
+    return ' '.repeat(leftPadding) + styled + ' '.repeat(Math.max(0, rightPadding));
+  };
 
   const line = (raw: string, styled: string) =>
-    `  ${chalk.cyan('│')} ${pad(raw, styled)} ${chalk.cyan('│')}`;
+    `  ${chalk.cyan('│')} ${center(raw, styled)} ${chalk.cyan('│')}`;
 
-  const title = `🎯  proj-track  v${version}`;
+  const title = `proj-track  v${version}`;
   const tagline = 'Auto-capture CLI history per-project';
   const features = '✓ Zero interference  ✓ VS Code ready  ✓ TypeScript';
 
@@ -18,7 +22,7 @@ export function getBanner(version: string): string {
     '',
     `  ${chalk.cyan('┌' + hr + '┐')}`,
     `  ${chalk.cyan('│')} ${' '.repeat(w)} ${chalk.cyan('│')}`,
-    line(title, `🎯  ${chalk.bold.white('proj-track')}  ${chalk.dim(`v${version}`)}`),
+    line(title, `${chalk.bold.white('proj-track')}  ${chalk.dim(`v${version}`)}`),
     line(tagline, chalk.dim(tagline)),
     line(features, `${chalk.green('✓')} Zero interference  ${chalk.green('✓')} VS Code ready  ${chalk.green('✓')} TypeScript`),
     `  ${chalk.cyan('│')} ${' '.repeat(w)} ${chalk.cyan('│')}`,
@@ -37,8 +41,8 @@ export function getFullHelp(version: string): string {
   const example = (cmd: string, comment: string) =>
     `  ${chalk.green('$')} ${chalk.white(cmd.padEnd(30))}${chalk.dim(`# ${comment}`)}`;
 
-  const link = (icon: string, label: string, url: string) =>
-    `  ${icon}  ${chalk.bold(label.padEnd(11))}${chalk.cyan(url)}`;
+  const link = (label: string, url: string) =>
+    `  ${chalk.bold(label.padEnd(11))}${chalk.cyan(url)}`;
 
   const sections = [
     banner,
@@ -76,11 +80,11 @@ export function getFullHelp(version: string): string {
     example('proj-track pause', 'Temporarily stop tracking'),
     '',
     chalk.bold('Links:'),
-    link('📖', 'Docs', 'https://ali-raza-arain.github.io/proj-track/'),
-    link('📦', 'npm', 'https://npmjs.com/package/proj-track'),
-    link('🐛', 'Issues', 'https://github.com/ali-raza-arain/proj-track/issues'),
+    link('Docs', 'https://ali-raza-arain.github.io/proj-track/'),
+    link('npm', 'https://npmjs.com/package/proj-track'),
+    link('Issues', 'https://github.com/ali-raza-arain/proj-track/issues'),
     '',
-    chalk.dim(`Made with ${chalk.red('❤')}  by Ali Raza Arain`),
+    chalk.dim(`Made with ${chalk.red('❤')}  by Ali Raza`),
     '',
   ];
 

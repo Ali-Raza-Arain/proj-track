@@ -44,7 +44,7 @@ git push origin main
 proj-track list
 
 # Re-run a command by its ID
-proj-track run 1710864000000
+proj-track run 3
 ```
 
 ## Key Features
@@ -54,6 +54,7 @@ proj-track run 1710864000000
 - **Per-project isolation** — Each project gets its own `.proj-track.json`
 - **Instant replay** — Re-run any command by ID
 - **Pause/resume** — Temporarily stop tracking without losing history
+- **Auto `.gitignore`** — Keeps proj-track files out of your repo automatically
 - **Bash + Zsh** — Works with both shells out of the box
 - **No telemetry** — All data stays on your machine
 

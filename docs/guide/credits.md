@@ -24,7 +24,7 @@ If **proj-track** saves your time, consider supporting its development:
 ## Contributors
 
 <a href="https://github.com/Ali-Raza-Arain/proj-track/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=Ali-Raza-Arain/proj-track" alt="Contributors" />
+  <img src="https://contrib.rocks/image?repo=ali-raza-arain/proj-track" alt="Contributors" />
 </a>
 
 Want to contribute? Check out the [GitHub repository](https://github.com/Ali-Raza-Arain/proj-track).
