@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/).
 
-## [1.0.1] - 2026-03-26
+## [2.0.0] - 2026-03-26
 
 ### Added
 - `proj-track gitignore` command — add proj-track files to `.gitignore`
@@ -20,6 +20,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `proj-track list` timestamps now display in short `MM/DD HH:MM` format
 - Long commands are truncated at 50 characters with `...` in list output
 - Running `proj-track` with no arguments now shows the full help
+
+## [1.0.1] - 2026-03-25
 
 ### Fixed
 - ID column alignment in `proj-track list` when IDs have varying widths
