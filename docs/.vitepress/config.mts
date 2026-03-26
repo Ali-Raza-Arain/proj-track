@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress'
+import { version } from '../../package.json'
 
 export default defineConfig({
   base: '/proj-track/',
@@ -31,6 +32,7 @@ export default defineConfig({
   },
   themeConfig: {
     nav: [
+      { text: `v${version}`, link: 'https://github.com/Ali-Raza-Arain/proj-track/releases' },
       { text: 'Guide', link: '/guide/getting-started' },
       { text: 'API', link: '/guide/api-reference' },
       { text: 'npm', link: 'https://www.npmjs.com/package/proj-track' },

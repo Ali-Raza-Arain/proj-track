@@ -26,12 +26,12 @@ export async function listCommand(): Promise<void> {
 
   console.log('');
   console.log(chalk.bold(`  Tracked Commands (${history.commands.length})`));
-  console.log(chalk.dim('  ID            Timestamp             Command'));
+  console.log(chalk.dim('  ID   Timestamp                Command'));
   console.log(chalk.dim('  ' + '─'.repeat(60)));
 
   for (const entry of history.commands) {
-    const id = chalk.cyan(String(entry.id).padEnd(14));
-    const ts = chalk.dim(entry.timestamp.padEnd(22));
+    const id = chalk.cyan(String(entry.id).padEnd(5));
+    const ts = chalk.dim(entry.timestamp.padEnd(25));
     const cmd = chalk.white(entry.command);
     console.log(`  ${id}${ts}${cmd}`);
   }

@@ -70,8 +70,12 @@ export function appendCommand(command: string, dir?: string): void {
     }
   }
 
+  const lastId = history.commands.length > 0
+    ? history.commands[history.commands.length - 1].id
+    : 0;
+
   history.commands.push({
-    id: Date.now(),
+    id: lastId + 1,
     command,
     timestamp: new Date().toLocaleString(),
   });
