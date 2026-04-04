@@ -5,7 +5,7 @@
 **Ali Raza** — Software Engineer & Open-Source Developer
 
 - GitHub: [Ali-Raza-Arain](https://github.com/Ali-Raza-Arain)
-- LinkedIn: [ali-raza-arain](https://linkedin.com/in/ali-raza-arain)
+- LinkedIn: [Ali-Raza-Arain](https://linkedin.com/in/ali-raza-arain)
 
 
 ## Support This Project
